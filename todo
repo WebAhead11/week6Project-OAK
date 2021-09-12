@@ -1,0 +1,7 @@
+- heroku
+
+- Include Error Handling. For example:
+if there is a programmer error on your server (e.g. a handler function does not act as intended), provide the user with a custom response (500 status code).
+- sign up form
+
+- documentation
