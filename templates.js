@@ -34,20 +34,38 @@ function home(email){
 
 }
 
-function logIn(){
-    return layout(
-        `
-        <h1>Log in to your account</h1>
-        <form id='loginForm'>
-        <label for='email'>Your email</label>
-        <input type='email' name='email' required>
-        <label for='password'>Your password</label>
-        <input type='password' name='password' required>
-        <button type='submit'>Log in</button>
-        </form>
-        <script src='login.js'></script>
-        `
-    )
+function logIn(message){
+    if(message){
+        return layout(
+            `
+            <h1>Log in to your account</h1>
+            <form id='loginForm'>
+            <label for='email'>Your email</label>
+            <input type='email' name='email' required>
+            <label for='password'>Your password</label>
+            <input type='password' name='password' required>
+            <button type='submit'>Log in</button>
+            </form>
+            ${message}
+            <script src='login.js'></script>
+            `
+        )
+    }else{
+        return layout(
+            `
+            <h1>Log in to your account</h1>
+            <form id='loginForm'>
+            <label for='email'>Your email</label>
+            <input type='email' name='email' required>
+            <label for='password'>Your password</label>
+            <input type='password' name='password' required>
+            <button type='submit'>Log in</button>
+            </form>
+            <script src='login.js'></script>
+            `
+        )
+    }
+    
     
 }
 function newPost(){
@@ -63,5 +81,33 @@ function newPost(){
         <script src='post.js'></script>
     `)
 }
+function signUp(message){
+    if(message){
+        return layout(`
+        <h1>Sign up</h1>
+            <form id='signupForm' action='/signup' method='post'>
+            <label for='title'>email</label>
+            <input type='text' name='email' required>
+            <label for='password'>password</label>
+            <input type='text' name='password' required>
+            <button type='submit'>sign up</button>
+            </form>
+            ${message}
+        `)
+    }else{
+        return layout(`
+        <h1>Sign up</h1>
+            <form id='signupForm' action='/signup' method='post'>
+            <label for='title'>email</label>
+            <input type='text' name='email' required>
+            <label for='password'>password</label>
+            <input type='text' name='password' required>
+            <button type='submit'>sign up</button>
+            </form>
+        `)
+    }
+   
+}
 
-module.exports = {home,layout,logIn,newPost};
+
+module.exports = {home,layout,logIn,newPost,signUp};

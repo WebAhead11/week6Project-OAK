@@ -2,12 +2,25 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const templates = require("./templates.js");
+var fs = require('fs');
 const server = express();
 const SECRET = 'shhhhhh';
 /** Logger */
 server.use((req,res,next)=>{
     console.log(req.method,req.url);
     next();
+})
+/** create a users.json file */
+server.use((req,res,next)=>{
+
+  
+  if(!fs.existsSync('./users.json')){
+    const data = {
+      "users":[]
+    };
+    fs.writeFileSync('./users.json', JSON.stringify(data)); // create an empty file if doesn't exist
+  }
+  next();
 })
 server.use(cookieParser());
 server.use(express.urlencoded()); // for POST requests
@@ -77,6 +90,36 @@ server.get('/posts',(req,res)=>{
   }
     
 })
+server.get('/signup',(req,res)=>{
+  const signup = templates.signUp();
+  res.send(signup);
+})
+server.post('/signup',(req,res)=>{
+  const user = {email:req.body.email, password:req.body.password};
+  const email = user.email;
+
+ // var data = JSON.stringify(email);
+  /** read users.json */
+  const jsonData = require('./users.json');
+  console.log('jsonData',jsonData);
+  jsonData.users.push(email);
+/** save usernames locally on the server */
+  fs.writeFile('./users.json', JSON.stringify(jsonData) , function (err) {
+    if (err) {
+      console.log('There has been an error saving your user data.');
+      console.log(err.message);
+      return;
+    }
+    console.log('user data saved successfully.')
+  });
+  
+    console.log("signed up",usernames);
+  
+    res.send(`
+            <h3>Signed up successfully!</h3>
+            <a href='/login'>Log in to verify your account</a>
+    `)
+})
 server.get('/login',(req,res)=>{
     const login = templates.logIn();
     res.send(login);
@@ -84,17 +127,39 @@ server.get('/login',(req,res)=>{
 // TOKEN FORMAT: authorization: Bearer <access_token>
 server.post('/login',(req,res)=>{
 
-    console.log("server.post:/login ",req.body);
     const user = {email:req.body.email, password:req.body.password};
     console.log("user", user);
-    const token = jwt.sign({user:user},SECRET);
-    res.cookie("user", token, { maxAge: 600000 });
-    
-    res.json({
-        token:token
-    });
-
-})
+  
+    try{
+      var data = require('./users.json');
+       
+    }catch(err){
+      console.log(err);
+    }
+   console.log("data",data);
+  
+    // try{
+    //   var myObj = JSON.parse(data);
+    // }catch(err){
+    //   console.log("error parsing json");
+    // }
+    if(!data.users.includes(user.email)){
+      // user is not registered
+      console.log("user is not registered");
+      const login = templates.logIn(`
+      <h1>user is not registered. please sign up first</h1>
+      <a href='/signup'>Sign up</a>
+      `);
+      res.send(login);
+    }
+    else{
+      const token = jwt.sign({user:user},SECRET);
+      res.cookie("user", token, { maxAge: 600000 });
+      
+      res.redirect('/');
+    }
+  })
+  
 
 server.get('/logout',(req,res)=>{
     res.clearCookie("user");
@@ -121,3 +186,4 @@ server.listen(3000, ()=>{
 
 const posts = [];
 const users = [];
+const usernames = [];
