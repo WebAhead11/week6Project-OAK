@@ -5,3 +5,5 @@ if there is a programmer error on your server (e.g. a handler function does not 
 - sign up form
 
 - documentation
+
+- save posts in posts.json
