@@ -1,11 +1,13 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const cors =  require("cors");
 const cookieParser = require("cookie-parser");
 const templates = require("./templates.js");
 var fs = require('fs');
 const server = express();
 const SECRET = 'shhhhhh';
 const PORT = process.env.PORT || 3000; 
+server.use(cors());
 /** Logger */
 server.use((req,res,next)=>{
     console.log(req.method,req.url);
