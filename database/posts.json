@@ -1,0 +1,16 @@
+{
+    "posts": [
+        {
+            "title": "1",
+            "newPost": "a"
+        },
+        {
+            "title": "2",
+            "newPost": "b"
+        },
+        {
+            "title": "RE: Project Ideas",
+            "newPost": "fs"
+        }
+    ]
+}

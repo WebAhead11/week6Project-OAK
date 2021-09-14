@@ -81,6 +81,13 @@ function newPost(){
         <script src='post.js'></script>
     `)
 }
+function posts(content){
+    return layout(`
+    <h1>All Posts</h1>
+        ${content}
+    <script src='posts.js'></script>
+        `)
+}
 function signUp(message){
     if(message){
         return layout(`

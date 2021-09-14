@@ -1,5 +1,3 @@
-- heroku
-
 - Include Error Handling. For example:
 if there is a programmer error on your server (e.g. a handler function does not act as intended), provide the user with a custom response (500 status code).
 - sign up form
@@ -7,3 +5,21 @@ if there is a programmer error on your server (e.g. a handler function does not 
 - documentation
 
 - save posts in posts.json
+
+- check password
+
+- can't sign up an already existing user - DONE
+
+- how to show posts normally
+
+- make html tags for posts, new-posts and others
+
+users.json format:
+{
+    "users":[
+    {email:"kassimbashir@gmail.com", password:"123"},
+    {email:"kassimbashir@hotmail.com", password:"1234"}
+    ]
+}
+
+- log out before sign up?

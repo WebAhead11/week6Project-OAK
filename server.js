@@ -17,11 +17,23 @@ server.use((req,res,next)=>{
 server.use((req,res,next)=>{
 
   
-  if(!fs.existsSync('./users.json')){
+  if(!fs.existsSync('./database/users.json')){
     const data = {
       "users":[]
     };
-    fs.writeFileSync('./users.json', JSON.stringify(data)); // create an empty file if doesn't exist
+    fs.writeFileSync('./database/users.json', JSON.stringify(data)); // create an empty file if doesn't exist
+  }
+  next();
+})
+/** create a posts.json file */
+server.use((req,res,next)=>{
+
+  
+  if(!fs.existsSync('./database/posts.json')){
+    const data = {
+      "posts":[]
+    };
+    fs.writeFileSync('./database/posts.json', JSON.stringify(data)); // create an empty file if doesn't exist
   }
   next();
 })
@@ -75,8 +87,20 @@ server.get('/new-post',(req,res)=>{
 })
 server.post('/new-post',(req,res)=>{
    const newPost = req.body;
-   posts.push(newPost);
-   console.log(posts);
+
+     /** read posts.json */
+  const jsonData = require('./database/posts.json');
+  console.log('jsonData',jsonData);
+  jsonData.posts.push(newPost);
+/** save posts locally on the server */
+  fs.writeFile('./database/posts.json', JSON.stringify(jsonData) , function (err) {
+    if (err) {
+      console.log('There has been an error saving your post data.');
+      console.log(err.message);
+      return;
+    }
+    console.log('post data saved successfully.')
+  });
    res.redirect('/posts');
 })
 server.get('/posts',(req,res)=>{
@@ -89,7 +113,9 @@ server.get('/posts',(req,res)=>{
     `
     );  
   }else{
-    res.send(posts);    
+    var data = require('./database/posts.json');
+    console.log(data);
+    res.send(data);    
   }
     
 })
@@ -101,13 +127,27 @@ server.post('/signup',(req,res)=>{
   const user = {email:req.body.email, password:req.body.password};
   const email = user.email;
 
- // var data = JSON.stringify(email);
   /** read users.json */
-  const jsonData = require('./users.json');
+  const jsonData = require('./database/users.json');
   console.log('jsonData',jsonData);
-  jsonData.users.push(email);
+  //   {
+  //     "users":[
+  //     {email:"kassimbashir@gmail.com", password:"123"},
+  //     {email:"kassimbashir@hotmail.com", password:"1234"}
+  //     ]
+  // }
+  /** check if user already exists */
+      /** map the data.users array to include only emails instead of a user obj */
+      const emails = jsonData.users.map(userObj => userObj.email);
+      if(emails.includes(email)){
+        // email already exists!
+        const signup = templates.signUp('<h3>email already exists. try again</h3>');
+        res.send(signup);
+        return;
+      }
+  jsonData.users.push(user);
 /** save usernames locally on the server */
-  fs.writeFile('./users.json', JSON.stringify(jsonData) , function (err) {
+  fs.writeFile('./database/users.json', JSON.stringify(jsonData) , function (err) {
     if (err) {
       console.log('There has been an error saving your user data.');
       console.log(err.message);
@@ -132,21 +172,24 @@ server.post('/login',(req,res)=>{
 
     const user = {email:req.body.email, password:req.body.password};
     console.log("user", user);
+    const email = user.email;
   
     try{
-      var data = require('./users.json');
+      var data = require('./database/users.json');
        
     }catch(err){
       console.log(err);
     }
    console.log("data",data);
-  
-    // try{
-    //   var myObj = JSON.parse(data);
-    // }catch(err){
-    //   console.log("error parsing json");
-    // }
-    if(!data.users.includes(user.email)){
+ //   {
+  //     "users":[
+  //     {email:"kassimbashir@gmail.com", password:"123"},
+  //     {email:"kassimbashir@hotmail.com", password:"1234"}
+  //     ]
+  // }
+  /** map the data.users array to include only emails instead of a user obj */
+  const emails = data.users.map(userObj => userObj.email);
+    if(!emails.includes(user.email)){
       // user is not registered
       console.log("user is not registered");
       const login = templates.logIn(`
@@ -154,11 +197,27 @@ server.post('/login',(req,res)=>{
       <a href='/signup'>Sign up</a>
       `);
       res.send(login);
-    }
+      
+    } 
     else{
+      /** check if username and password match */
+          // find the user object containing the appropriate username
+          const userInDatabase = data.users.find(user => user.email == email);
+          const passwordInDatabase = userInDatabase.password;
+          const inputPassword = user.password;
+          if(inputPassword !== passwordInDatabase){
+            // username and password do not match!
+            console.log("username and password do not match!");
+            const login = templates.logIn(`
+            <h1>username and password do not match!</h1>
+            <a href='/signup'>Sign up</a>
+            `);
+            res.send(login);
+            return;
+          }
+      console.log("valid user");
       const token = jwt.sign({user:user},SECRET);
       res.cookie("user", token, { maxAge: 600000 });
-      
       res.redirect('/');
     }
   })
