@@ -1,16 +1,16 @@
-- Include Error Handling. For example:
+- Include Error Handling. DONE
 if there is a programmer error on your server (e.g. a handler function does not act as intended), provide the user with a custom response (500 status code).
 - sign up form
 
-- documentation
+- documentation. HALF DONE
 
-- save posts in posts.json
+- save posts in posts.json  DONE
 
-- check password
+- check password DONE
 
 - can't sign up an already existing user - DONE
 
-- how to show posts normally
+- how to show posts normally 
 
 - make html tags for posts, new-posts and others
 

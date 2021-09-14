@@ -1,4 +1,4 @@
-const form = document.getElementById("loginForm");
+const form = document.getElementById("loginFormMSG");
 var token='';
 form.addEventListener("submit",(event)=>{
   console.log("preventing default");
@@ -14,11 +14,12 @@ form.addEventListener("submit",(event)=>{
 			// ex. if error 404
           throw new Error(response.status);
         }
-        console.log(response);
         return response.text();
       })
       .then(response=> {
         document.body.innerHTML = response;
+          localStorage.setItem("token",response.token);
+       
       })
       .catch(err=>console.log(err));
 })

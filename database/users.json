@@ -1,16 +1,1 @@
-{
-    "users": [
-        {
-            "email": "kassimbashir@gmail.com",
-            "password": "123"
-        },
-        {
-            "email": "kassimbashir@hotmail.com",
-            "password": "123"
-        },
-        {
-            "email": "ramie.bashir.1995@gmail.com",
-            "password": "re"
-        }
-    ]
-}
+{"users":[{"email":"kassimbashir@gmail.com","password":"123"},{"email":"kassimbashir@hotmail.com","password":"123"},{"email":"ramie.bashir.1995@gmail.com","password":"re"},{"email":"kassimbashir@gmail.comv","password":"123"}]}

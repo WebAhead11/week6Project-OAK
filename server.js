@@ -207,12 +207,14 @@ server.post('/login',(req,res)=>{
           const inputPassword = user.password;
           if(inputPassword !== passwordInDatabase){
             // username and password do not match!
-            console.log("username and password do not match!");
-            const login = templates.logIn(`
+             console.log("username and password do not match!");
+            const login2 = templates.logIn(`
             <h1>username and password do not match!</h1>
             <a href='/signup'>Sign up</a>
             `);
-            res.send(login);
+         //   const login2 = templates.logIn();
+            res.send(login2);
+      //  res.redirect('/');
             return;
           }
       console.log("valid user");

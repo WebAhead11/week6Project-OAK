@@ -39,7 +39,7 @@ function logIn(message){
         return layout(
             `
             <h1>Log in to your account</h1>
-            <form id='loginForm'>
+            <form id='loginForm' method='POST'>
             <label for='email'>Your email</label>
             <input type='email' name='email' required>
             <label for='password'>Your password</label>
@@ -47,21 +47,20 @@ function logIn(message){
             <button type='submit'>Log in</button>
             </form>
             ${message}
-            <script src='login.js'></script>
+            
             `
         )
     }else{
         return layout(
             `
             <h1>Log in to your account</h1>
-            <form id='loginForm'>
+            <form id='loginForm' method='POST'>
             <label for='email'>Your email</label>
             <input type='email' name='email' required>
             <label for='password'>Your password</label>
             <input type='password' name='password' required>
             <button type='submit'>Log in</button>
             </form>
-            <script src='login.js'></script>
             `
         )
     }
