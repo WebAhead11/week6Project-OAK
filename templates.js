@@ -22,7 +22,9 @@ function home(email){
     if(email){
         return layout( `
         <h1>Welcome back ${email}</h1>
-        <a href=/logout>Log out</a>
+        <a href='/logout'>Log out</a>
+        <br>
+        <a href='/posts'>see all posts</a>
         `
         );
     }
@@ -38,8 +40,9 @@ function logIn(message){
     if(message){
         return layout(
             `
+            
             <h1>Log in to your account</h1>
-            <form id='loginForm' method='POST'>
+            <form id='loginForm' method='pOst'>
             <label for='email'>Your email</label>
             <input type='email' name='email' required>
             <label for='password'>Your password</label>
@@ -47,20 +50,22 @@ function logIn(message){
             <button type='submit'>Log in</button>
             </form>
             ${message}
-            
+            <a href='/signup'>Sign Up</a>
             `
         )
     }else{
         return layout(
             `
             <h1>Log in to your account</h1>
-            <form id='loginForm' method='POST'>
+            <form id='loginForm' method='post'>
             <label for='email'>Your email</label>
             <input type='email' name='email' required>
             <label for='password'>Your password</label>
             <input type='password' name='password' required>
             <button type='submit'>Log in</button>
             </form>
+            <br>
+            <a href='/signup'>Sign Up</a>
             `
         )
     }
@@ -70,21 +75,25 @@ function logIn(message){
 function newPost(){
     return layout(`
     <h1>Make a new post</h1>
-        <form id='postForm'>
+        <form id='postForm' method='post' action = '/new-post'>
         <label for='title'>Title</label>
         <input type='text' name='title'>
         <label for='newPost'>New Post</label>
         <input type='text' name='newPost'>
         <button type='submit'>Post</button>
         </form>
-        <script src='post.js'></script>
     `)
 }
 function posts(content){
     return layout(`
     <h1>All Posts</h1>
-        ${content}
-    <script src='posts.js'></script>
+    <nav>
+    <a href='/new-post'>Make a new Post</a>
+    <a href='/logout'>Log Out</a>
+    </nav>
+    
+    <div id='allPosts'></div>
+    <script type="module" src='posts.js' param=${content}></script>
         `)
 }
 function signUp(message){
@@ -116,4 +125,4 @@ function signUp(message){
 }
 
 
-module.exports = {home,layout,logIn,newPost,signUp};
+module.exports = {home,layout,logIn,newPost,signUp,posts};

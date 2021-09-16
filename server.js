@@ -1,9 +1,11 @@
+var btoa = require('btoa');
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors =  require("cors");
 const cookieParser = require("cookie-parser");
 const templates = require("./templates.js");
 var fs = require('fs');
+// const { btoa } = require("buffer");
 const server = express();
 const SECRET = 'shhhhhh';
 const PORT = process.env.PORT || 3000; 
@@ -45,12 +47,10 @@ server.use(express.static('./public'));
 /**Verify token **/
 server.use((req,res,next)=>{
     const token = req.cookies.user;
-    console.log("token in server.use:",token);
     if(token){
       const user = jwt.verify(token,SECRET);
       req.user = user;
-      console.log("token",token);
-      console.log("user",user);
+      console.log(user," logged in");
     }
     next();
   });
@@ -114,8 +114,11 @@ server.get('/posts',(req,res)=>{
     );  
   }else{
     var data = require('./database/posts.json');
-    console.log(data);
-    res.send(data);    
+    let stringObj = JSON.stringify(data);
+    encodedData = btoa(stringObj);
+    const posts = templates.posts(encodedData );
+   // console.log("posts in server",JSON.stringify(data));
+    res.send(posts);    
   }
     
 })
@@ -126,16 +129,8 @@ server.get('/signup',(req,res)=>{
 server.post('/signup',(req,res)=>{
   const user = {email:req.body.email, password:req.body.password};
   const email = user.email;
-
   /** read users.json */
   const jsonData = require('./database/users.json');
-  console.log('jsonData',jsonData);
-  //   {
-  //     "users":[
-  //     {email:"kassimbashir@gmail.com", password:"123"},
-  //     {email:"kassimbashir@hotmail.com", password:"1234"}
-  //     ]
-  // }
   /** check if user already exists */
       /** map the data.users array to include only emails instead of a user obj */
       const emails = jsonData.users.map(userObj => userObj.email);
@@ -167,11 +162,9 @@ server.get('/login',(req,res)=>{
     const login = templates.logIn();
     res.send(login);
 })
-// TOKEN FORMAT: authorization: Bearer <access_token>
 server.post('/login',(req,res)=>{
 
     const user = {email:req.body.email, password:req.body.password};
-    console.log("user", user);
     const email = user.email;
   
     try{
@@ -180,13 +173,7 @@ server.post('/login',(req,res)=>{
     }catch(err){
       console.log(err);
     }
-   console.log("data",data);
- //   {
-  //     "users":[
-  //     {email:"kassimbashir@gmail.com", password:"123"},
-  //     {email:"kassimbashir@hotmail.com", password:"1234"}
-  //     ]
-  // }
+
   /** map the data.users array to include only emails instead of a user obj */
   const emails = data.users.map(userObj => userObj.email);
     if(!emails.includes(user.email)){
@@ -210,16 +197,12 @@ server.post('/login',(req,res)=>{
              console.log("username and password do not match!");
             const login2 = templates.logIn(`
             <h1>username and password do not match!</h1>
-            <a href='/signup'>Sign up</a>
             `);
-         //   const login2 = templates.logIn();
             res.send(login2);
-      //  res.redirect('/');
             return;
           }
-      console.log("valid user");
       const token = jwt.sign({user:user},SECRET);
-      res.cookie("user", token, { maxAge: 600000 });
+      res.cookie("user", token, { maxAge: 900000 });
       res.redirect('/');
     }
   })

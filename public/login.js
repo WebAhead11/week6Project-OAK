@@ -14,11 +14,11 @@ form.addEventListener("submit",(event)=>{
 			// ex. if error 404
           throw new Error(response.status);
         }
-        console.log(response);
         return response.text();
       })
       .then(response=> {
-        document.body.innerHTML = response;
+         document.body.innerHTML = response;
+      
       })
       .catch(err=>console.log(err));
 })

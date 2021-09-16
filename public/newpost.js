@@ -1,7 +1,7 @@
 const form = document.getElementById("postForm");
 const token= localStorage.getItem('token');
 if(!token){
-    throw new Error("token not found in post.js");
+    throw new Error("token not found in newpost.js");
 }
 form.addEventListener("submit",(event)=>{
     event.preventDefault();
@@ -22,7 +22,7 @@ form.addEventListener("submit",(event)=>{
         return response.json();
       })
       .then(response=> {
-         
+      
       })
       .catch(err=>console.log(err));
 })
