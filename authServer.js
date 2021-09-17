@@ -20,6 +20,24 @@ server.use(express.urlencoded()); // for POST requests
 server.use(express.json()); // for POST request in JSON format
 server.use(express.static('./public'));
 
+server.get('/',(req,res)=>{
+  res.redirect('http://localhost:3000/');
+})
+server.get('/login',(req,res)=>{
+  res.redirect('http://localhost:3000/login');
+})
+server.get('/signup',(req,res)=>{
+  res.redirect('http://localhost:3000/signup');
+})
+server.get('/logout',(req,res)=>{
+  res.redirect('http://localhost:3000/logout');
+})
+server.get('/new-post',(req,res)=>{
+  res.redirect('http://localhost:3000/new-post');
+})
+server.get('/posts',(req,res)=>{
+  res.redirect('http://localhost:3000/posts');
+})
 
 server.post('/login',async (req,res)=>{ // bcrypt is an asnyc library
   try{
