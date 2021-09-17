@@ -2,19 +2,15 @@
     "users": [
         {
             "email": "kassimbashir@gmail.com",
-            "password": "123"
+            "password": "$2b$10$wne7GC9B.bhy22fdJP9.9.uEc8mcIC22Zwhk.pTK1mGDl3lFYxcBy"
         },
         {
             "email": "kassimbashir@hotmail.com",
-            "password": "123"
+            "password": "$2b$10$dIqtdDhSa.EfQ5wBBiXPH.C2AiN/8heoyJc9.PNzB/O2d.oE.TXie"
         },
         {
-            "email": "ramie.bashir.1995@gmail.com",
-            "password": "re"
-        },
-        {
-            "email": "kassimbashir@gmail.comv",
-            "password": "123"
+            "email": "a@d",
+            "password": "$2b$10$ydmDfx0k1Jbioov3.SvhfuMbVCxucxSyeITc.Kf6ALO7/KB4383AW"
         }
     ]
 }

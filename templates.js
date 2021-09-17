@@ -42,7 +42,7 @@ function logIn(message){
             `
             
             <h1>Log in to your account</h1>
-            <form id='loginForm' method='pOst'>
+            <form id='loginForm' action='http://localhost:4000/login' method='pOst'>
             <label for='email'>Your email</label>
             <input type='email' name='email' required>
             <label for='password'>Your password</label>
@@ -50,14 +50,14 @@ function logIn(message){
             <button type='submit'>Log in</button>
             </form>
             ${message}
-            <a href='/signup'>Sign Up</a>
+            <a href='http://localhost:3000/signup'>Sign Up</a>
             `
         )
     }else{
         return layout(
             `
             <h1>Log in to your account</h1>
-            <form id='loginForm' method='post'>
+            <form id='loginForm' action='http://localhost:4000/login' method='post'>
             <label for='email'>Your email</label>
             <input type='email' name='email' required>
             <label for='password'>Your password</label>
@@ -65,7 +65,7 @@ function logIn(message){
             <button type='submit'>Log in</button>
             </form>
             <br>
-            <a href='/signup'>Sign Up</a>
+            <a href='http://localhost:3000/signup'>Sign Up</a>
             `
         )
     }

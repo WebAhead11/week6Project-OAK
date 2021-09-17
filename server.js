@@ -1,13 +1,15 @@
-var btoa = require('btoa');
+/** this server runs on port 3000 */
+/** both server should share the same ACCESS_TOKEN_SECRET */
+var btoa = require('btoa'); // for encrypting data to send from server to user
+const bcrypt = require("bcrypt"); // for hashing passwords
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const cors =  require("cors");
+const cors =  require("cors"); // for heroku
 const cookieParser = require("cookie-parser");
 const templates = require("./templates.js");
 var fs = require('fs');
-// const { btoa } = require("buffer");
 const server = express();
-const SECRET = 'shhhhhh';
+const ACCESS_TOKEN_SECRET = 'shhhhhh';
 const PORT = process.env.PORT || 3000; 
 server.use(cors());
 /** Logger */
@@ -48,12 +50,18 @@ server.use(express.static('./public'));
 server.use((req,res,next)=>{
     const token = req.cookies.user;
     if(token){
-      const user = jwt.verify(token,SECRET);
+      // if a user is logged in
+      const user = jwt.verify(token,ACCESS_TOKEN_SECRET);
       req.user = user;
-      console.log(user," logged in");
     }
     next();
   });
+  // server.use('/',(req,res,next)=>{
+  //   const token = req.cookies.user;
+  //   if(token){
+
+  //   }
+  // });
 
 server.get('/',(req,res)=>{
     /** implement req.email */
@@ -126,8 +134,11 @@ server.get('/signup',(req,res)=>{
   const signup = templates.signUp();
   res.send(signup);
 })
-server.post('/signup',(req,res)=>{
-  const user = {email:req.body.email, password:req.body.password};
+server.post('/signup',async (req,res)=>{
+  try{
+    const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(req.body.password,salt);
+  const user = {email:req.body.email, password:hashedPassword};
   const email = user.email;
   /** read users.json */
   const jsonData = require('./database/users.json');
@@ -151,64 +162,32 @@ server.post('/signup',(req,res)=>{
     console.log('user data saved successfully.')
   });
   
-    console.log("signed up",usernames);
+    console.log("signed up",email);
   
     res.send(`
             <h3>Signed up successfully!</h3>
             <a href='/login'>Log in to verify your account</a>
     `)
+  }catch(err){
+    console.log(err);
+  }
+  
 })
-server.get('/login',(req,res)=>{
+server.get('/login', (req,res)=>{  
+ 
     const login = templates.logIn();
     res.send(login);
 })
+
 server.post('/login',(req,res)=>{
+ //  res.redirect("http://localhost:4000/login");
 
-    const user = {email:req.body.email, password:req.body.password};
-    const email = user.email;
-  
-    try{
-      var data = require('./database/users.json');
-       
-    }catch(err){
-      console.log(err);
-    }
-
-  /** map the data.users array to include only emails instead of a user obj */
-  const emails = data.users.map(userObj => userObj.email);
-    if(!emails.includes(user.email)){
-      // user is not registered
-      console.log("user is not registered");
-      const login = templates.logIn(`
-      <h1>user is not registered. please sign up first</h1>
-      <a href='/signup'>Sign up</a>
-      `);
-      res.send(login);
-      
-    } 
-    else{
-      /** check if username and password match */
-          // find the user object containing the appropriate username
-          const userInDatabase = data.users.find(user => user.email == email);
-          const passwordInDatabase = userInDatabase.password;
-          const inputPassword = user.password;
-          if(inputPassword !== passwordInDatabase){
-            // username and password do not match!
-             console.log("username and password do not match!");
-            const login2 = templates.logIn(`
-            <h1>username and password do not match!</h1>
-            `);
-            res.send(login2);
-            return;
-          }
-      const token = jwt.sign({user:user},SECRET);
-      res.cookie("user", token, { maxAge: 900000 });
-      res.redirect('/');
-    }
-  })
-  
+})
 
 server.get('/logout',(req,res)=>{
+    const token = req.cookies.user;
+    const user = jwt.verify(token,ACCESS_TOKEN_SECRET);
+    console.log( user.user.email," logged out");
     res.clearCookie("user");
     res.redirect("/");
 })
@@ -228,9 +207,5 @@ server.use((req,res)=>{
 })
 
 server.listen(PORT, ()=>{
-    console.log("app is starting on port 3000");
+    console.log(`app is starting on port ${PORT}`);
 })
-
-const posts = [];
-const users = [];
-const usernames = [];
