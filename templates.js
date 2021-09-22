@@ -1,5 +1,5 @@
-function layout(content){
-    return `
+function layout(content) {
+  return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -15,34 +15,32 @@ function layout(content){
         ${content}
     </body>
     </html> 
-    `
+    `;
 }
 
-function home(email){
-    if(email){
-        return layout( `
+function home(email) {
+  if (email) {
+    return layout(`
         <h1>Welcome back ${email}</h1>
         <a href='/logout'>Log out</a>
         <br>
         <a href='/posts'>see all posts</a>
-        `
-        );
-    }
-    return layout(
-        `
+        `);
+  }
+  return layout(
+    `
         <a href='/login'>Log in</a>
         `
-    );
-
+  );
 }
 
-function logIn(message){
-    if(message){
-        return layout(
-            `
+function logIn(message) {
+  if (message) {
+    return layout(
+      `
             
             <h1>Log in to your account</h1>
-            <form id='loginForm' action='http://localhost:4000/login' method='pOst'>
+            <form id='loginForm' method='pOst'>
             <label for='email'>Your email</label>
             <input type='email' name='email' required>
             <label for='password'>Your password</label>
@@ -50,14 +48,14 @@ function logIn(message){
             <button type='submit'>Log in</button>
             </form>
             ${message}
-            <a href='http://localhost:3000/signup'>Sign Up</a>
+            <a href='signup'>Sign Up</a>
             `
-        )
-    }else{
-        return layout(
-            `
+    );
+  } else {
+    return layout(
+      `
             <h1>Log in to your account</h1>
-            <form id='loginForm' action='http://localhost:4000/login' method='post'>
+            <form id='loginForm' action='login' method='post'>
             <label for='email'>Your email</label>
             <input type='email' name='email' required>
             <label for='password'>Your password</label>
@@ -65,15 +63,13 @@ function logIn(message){
             <button type='submit'>Log in</button>
             </form>
             <br>
-            <a href='http://localhost:3000/signup'>Sign Up</a>
+            <a href='signup'>Sign Up</a>
             `
-        )
-    }
-    
-    
+    );
+  }
 }
-function newPost(){
-    return layout(`
+function newPost() {
+  return layout(`
     <h1>Make a new post</h1>
         <form id='postForm' method='post' action = '/new-post'>
         <label for='title'>Title</label>
@@ -82,10 +78,10 @@ function newPost(){
         <input type='text' name='newPost'>
         <button type='submit'>Post</button>
         </form>
-    `)
+    `);
 }
-function posts(content){
-    return layout(`
+function posts(content) {
+  return layout(`
     <h1>All Posts</h1>
     <nav>
     <a href='/new-post'>Make a new Post</a>
@@ -94,11 +90,11 @@ function posts(content){
     
     <div id='allPosts'></div>
     <script type="module" src='posts.js' param=${content}></script>
-        `)
+        `);
 }
-function signUp(message){
-    if(message){
-        return layout(`
+function signUp(message) {
+  if (message) {
+    return layout(`
         <h1>Sign up</h1>
             <form id='signupForm' action='/signup' method='post'>
             <label for='title'>email</label>
@@ -108,21 +104,19 @@ function signUp(message){
             <button type='submit'>sign up</button>
             </form>
             ${message}
-        `)
-    }else{
-        return layout(`
+        `);
+  } else {
+    return layout(`
         <h1>Sign up</h1>
             <form id='signupForm' action='/signup' method='post'>
             <label for='title'>email</label>
-            <input type='text' name='email' required>
+            <input type='email' name='email' required>
             <label for='password'>password</label>
-            <input type='text' name='password' required>
+            <input type='password' name='password' minlength='3' required>
             <button type='submit'>sign up</button>
             </form>
-        `)
-    }
-   
+        `);
+  }
 }
 
-
-module.exports = {home,layout,logIn,newPost,signUp,posts};
+module.exports = { home, layout, logIn, newPost, signUp, posts };
