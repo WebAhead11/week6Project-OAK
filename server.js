@@ -57,6 +57,23 @@ server.post("/new-post", (req, res) => {
 
   /** read posts.json */
   const jsonData = require("./database/posts.json");
+  /** a loop that breaks when we find a good random unique post id */
+  let id;
+  while (true) {
+    /**generate a random post id */
+    id = Math.floor(Math.random() * 1000000) + 1;
+    /** check if it is unique */
+    const found = jsonData.posts.find((postObj) => postObj.id == id);
+    if (!found) {
+      /** id is unique => make it post id */
+      newPost.id = id;
+      break;
+    } else {
+      console.log("id in not unique. look for another one");
+    }
+  }
+
+  /** add new post to database */
   jsonData.posts.push(newPost);
   /** save posts locally on the server */
   fs.writeFile(
@@ -200,6 +217,37 @@ server.get("/logout", (req, res) => {
   console.log(user.user.email, " logged out");
   res.clearCookie("user");
   res.redirect("/");
+});
+server.post("/delete-post", (req, res) => {
+  const postToDelete = req.body;
+  /** read posts.json */
+  const jsonData = require("./database/posts.json");
+  /** find the post to delete in the database */
+  const result = jsonData.posts.find((obj) => {
+    console.log(obj, "===", postToDelete);
+    return obj.id === postToDelete.id;
+  });
+  if (!result) {
+    /** post to delete not found */
+    throw new Error("post to delete not found");
+  }
+  console.log("result", result);
+  /** delete a post */
+  jsonData.posts.splice(jsonData.posts.indexOf(result), 1);
+  /** save updated posts locally on the server */
+  fs.writeFile(
+    "./database/posts.json",
+    JSON.stringify(jsonData),
+    function (err) {
+      if (err) {
+        console.log("There has been an error saving your post data.");
+        console.log(err.message);
+        return;
+      }
+      console.log("post data saved successfully.");
+    }
+  );
+  res.send("ok");
 });
 /** Else */
 server.use((req, res) => {
