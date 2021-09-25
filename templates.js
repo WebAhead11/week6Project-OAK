@@ -76,7 +76,7 @@ function newPost() {
         <label for='title'>Title</label>
         <input type='text' name='title'>
         <label for='newPost'>New Post</label>
-        <input type='text' name='newPost'>
+        <input type='text' name='post_content'>
         <button type='submit'>Post</button>
         </form>
     `);

@@ -28,3 +28,11 @@ if there is a programmer error on your server (e.g. a handler function does not 
 - comment on a post
 
 - put it on heroku
+- how to make two servers working on different PORTS, work on heroku.
+The problem is that you need to redirect from one server to another.
+
+-replace json databae with sql database : DONE
+
+- SQL injection in INSERT (parameterized query): DONE
+
+- add username to post
