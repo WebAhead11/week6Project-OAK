@@ -27,5 +27,4 @@ if there is a programmer error on your server (e.g. a handler function does not 
 - delete a post
 - comment on a post
 
-- how to make two servers working on different PORTS, work on heroku.
-The problem is that you need to redirect from one server to another.
+- put it on heroku
