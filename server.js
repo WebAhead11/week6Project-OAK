@@ -50,17 +50,17 @@ server.get("/new-post", (req, res) => {
 server.post("/new-post", async (req, res) => {
   const newPost = req.body;
   const user = req.user;
-  console.log(newPost);
-  console.log("user", user);
+  //  console.log(newPost);
+  // console.log("user", user);
   /** get user id */
   const id_query = `SELECT id FROM users WHERE email='${user.user.email}'`;
   const result = await db.query(id_query);
   const user_id = result.rows[0].id;
-  console.log("result", result.rows);
+  //  console.log("result", result.rows);
 
   const insertQuery = `INSERT INTO posts (title,text_content,user_id) VALUES($1,$2,$3)`;
 
-  console.log(insertQuery);
+  // console.log(insertQuery);
   const resu = await db.query(insertQuery, [
     newPost.title,
     newPost.post_content,
@@ -81,23 +81,24 @@ server.get("/posts", async (req, res) => {
   } else {
     /** read post from DB */
     const postsResult = await db.query(
-      `SELECT title,text_content,user_id FROM posts`
+      `SELECT id,title,text_content,user_id FROM posts`
     );
-    console.log("postsResult.rows", postsResult.rows);
-    const postsResultRows = postsResult.rows; //[{ "title": "1","text_content": "a",user_id=1}, {"title": "2", "text_content": "b", user_id=2 } ]
+    //  console.log("postsResult.rows", postsResult.rows);
+    const postsResultRows = postsResult.rows; //[{ "id"=1,"title": "1","text_content": "a",user_id=1}, {"id"=2,"title": "2", "text_content": "b", user_id=2 } ]
 
     /** get username from DB using user_id */
     const postsResultRowsWithUsernames = await Promise.all(
       postsResultRows.map(async (obj) => {
         const emailQuery = `SELECT email FROM users WHERE id=${obj.user_id}`;
         const emailResult = await db.query(emailQuery);
-        console.log("email", emailResult.rows[0].email);
+        //     console.log("email", emailResult.rows[0].email);
         obj.email = emailResult.rows[0].email;
         return obj;
       })
     );
 
-    console.log("postsResultRowsWithUsernames", postsResultRowsWithUsernames);
+    //
+    //console.log("postsResultRowsWithUsernames", postsResultRowsWithUsernames);
 
     /** convert posts array into a JSON object **/
     const JSONdata = { posts: postsResult.rows }; // { "posts":[{ "title": "1","text_content": "a",user_id=1,email='kassimbashir@gmail.com}, {"title": "2", "text_content": "b", user_id=2,email='kassimnbashir@hotmail.com } ]}
@@ -159,10 +160,9 @@ server.post("/login", async (req, res) => {
     /** map emailObjs into an array of emails */
     const emails = emailsObjs.map((emailObj) => emailObj.email); // emails = ['kassimbashir@gmail.com','kassimbashir@hotmail.com']
     /** check if user is registered */
-    console.log(emails, user.email);
     if (!emails.includes(user.email)) {
       // user is not registered
-      console.log("user is not registered");
+      //  console.log("user is not registered");
       const login = templates.logIn(`
         <h1>user is not registered. please sign up first</h1>
         `);
@@ -178,7 +178,6 @@ server.post("/login", async (req, res) => {
       //  console.log("result", result.rows);
       const passwordInDatabase = passwordResult.rows[0].password;
       const inputPassword = user.password; // plaintext password given by user when trying to log in
-      console.log(passwordInDatabase);
       const passwordsMatch = await bcrypt.compare(
         inputPassword,
         passwordInDatabase
@@ -208,6 +207,14 @@ server.get("/logout", (req, res) => {
   console.log(user.user.email, " logged out");
   res.clearCookie("user");
   res.redirect("/");
+});
+server.post("/delete-post", async (req, res) => {
+  const postToDelete = req.body;
+  // console.log("postToDelete", postToDelete, typeof postToDelete);
+  const deleteQueryResult = await db.query(
+    `DELETE FROM posts WHERE id=${postToDelete.id}`
+  );
+  res.send("ok");
 });
 /** Else */
 server.use((req, res) => {

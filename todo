@@ -19,7 +19,7 @@ if there is a programmer error on your server (e.g. a handler function does not 
 - password encryption - DONE
 - make a refresh token
 - make an authenticaton server - DONE
-- make funcitons for long code
+- make functions for long code
 - make a toast message when someone signs in/out. (CSS)
 
 - Heroku is not working? how to debug?
