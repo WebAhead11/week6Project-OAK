@@ -86,6 +86,9 @@ server.get("/posts", async (req, res) => {
     //  console.log("postsResult.rows", postsResult.rows);
     const postsResultRows = postsResult.rows; //[{ "id"=1,"title": "1","text_content": "a",user_id=1}, {"id"=2,"title": "2", "text_content": "b", user_id=2 } ]
 
+    //[{ "id"=1,"title": "1","text_content": "a",user_id=1}, {"id"=2,"title": "2", "text_content": "b", user_id=2 } ]
+
+    //[{ "id"=1,"title": "1","text_content": "a",user_id=1, "email":kassimnbashir@ferger}, {"id"=2,"title": "2", "text_content": "b", user_id=2 } ]
     /** get username from DB using user_id */
     const postsResultRowsWithUsernames = await Promise.all(
       postsResultRows.map(async (obj) => {

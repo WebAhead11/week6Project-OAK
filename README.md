@@ -3,6 +3,25 @@ JWT Authentication
 
 How to use:
 - npm install
-- there are two servers that we need to run: server.js on port 3000 and authServer.js on port 4000.
-=> npm run dev OR npm start - each of these commands will activate both servers 
+- start sql server with the termminal command: sudo service postgresql start
+- npm run dev
 - then go to http://localhost:3000/  
+
+features:
+- email/ password authentication.
+- route protection
+
+- Error handling. e.g.,
+    * can't sign up an already existing user
+    * email and password must match
+    * can't sign in a non-registered email
+
+- password encryption
+
+- delete a post
+
+- SQL database
+
+- secure from SQL injection attack using parameterized query
+
+- show email of the user that posted

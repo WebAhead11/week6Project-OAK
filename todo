@@ -35,4 +35,4 @@ The problem is that you need to redirect from one server to another.
 
 - SQL injection in INSERT (parameterized query): DONE
 
-- add username to post
+- add username to post: DONE
